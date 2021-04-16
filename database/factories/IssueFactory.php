@@ -24,8 +24,8 @@ class IssueFactory extends Factory
         return [
             'title' => $this->faker->word(),
             'description' => $this->faker->sentence(),
-            'place' => $this->faker->numerify('PC-lab-##'),
-            'status' => $this->faker->randomElement(['NEW', 'DOING', 'DONE']),
+            'place' => $this->faker->numerify("PC-##"),
+            'status' => $this->faker->randomElement(['NEW', 'DOING', 'DONE'])
         ];
     }
 }

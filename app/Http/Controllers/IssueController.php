@@ -57,17 +57,18 @@ class IssueController extends Controller
      */
     public function update(Request $request, Issue $issue)
     {
-        $data = $request->validate([
+        $validated_data = $request->validate([
             'title' => 'sometimes|required',
-            'description' => 'sometimes',
-            'place' => 'sometimes',
+            'description' => 'sometimes|nullable',
+            'place' => 'sometimes|nullable',
             'status' => [
-                'required',
                 'sometimes',
-                Rule::in(['NEW', 'DOING', 'DONE']),
-            ],
+                'required',
+                Rule::in(['NEW', 'DOING', 'DONE'])
+            ]
         ]);
-        $issue->update($data);
+
+        $issue->update($validated_data);
         return $issue;
     }
 
