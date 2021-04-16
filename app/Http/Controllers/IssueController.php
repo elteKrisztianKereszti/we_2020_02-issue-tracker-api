@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Issue;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class IssueController extends Controller
 {
@@ -14,7 +15,7 @@ class IssueController extends Controller
      */
     public function index()
     {
-        //
+        return Issue::all();
     }
 
     /**
@@ -25,7 +26,15 @@ class IssueController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'title' => 'required',
+            'description' => 'nullable',
+            'place' => 'nullable',
+            'status' => [
+                Rule::in(['NEW', 'DOING', 'DONE']),
+            ],
+        ]);
+        return Issue::create($data);
     }
 
     /**
@@ -36,7 +45,7 @@ class IssueController extends Controller
      */
     public function show(Issue $issue)
     {
-        //
+        return $issue;
     }
 
     /**
@@ -48,7 +57,18 @@ class IssueController extends Controller
      */
     public function update(Request $request, Issue $issue)
     {
-        //
+        $data = $request->validate([
+            'title' => 'sometimes|required',
+            'description' => 'sometimes',
+            'place' => 'sometimes',
+            'status' => [
+                'required',
+                'sometimes',
+                Rule::in(['NEW', 'DOING', 'DONE']),
+            ],
+        ]);
+        $issue->update($data);
+        return $issue;
     }
 
     /**
@@ -59,6 +79,7 @@ class IssueController extends Controller
      */
     public function destroy(Issue $issue)
     {
-        //
+        $issue->delete();
+        return response()->json(null, 204);
     }
 }
